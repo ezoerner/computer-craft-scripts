@@ -1,14 +1,15 @@
 -- Based on "Vertical mineshaft with water drop" at
 -- http://www.minecraftwiki.net/wiki/Mining#Vertical_mineshaft_with_water_drop
 
--- start with turtle over ascent shaft facing toward the descent shaft
+-- start with turtle at level that will be top of shaft and facing forward
+-- to what will be the alcove
 
 -- slot 16: 24+ torches
 -- slot 15: water bucket
 -- slot 14: water bucket
 -- slot 13: water bucket
 -- slot 12: 64 ladders or vines
--- slot 11: 1 cobblestone, used for comparison
+-- slot 11: 1+ cobblestone, used for comparison
 -- slot 10: fuel (how many coal are needed?)
 
 local maxSlot = 10
@@ -185,10 +186,11 @@ local function turnAround()
 end
 
 local function digAlcove()
-    if not tryUp() or tryForwards() or tryForwards or
-            tryDown() then return false end
+    if not tryForwards() or not tryUp() or
+            not tryForwards() or not tryForwards() or
+            not tryDown() then return false end
     turnAround()
-    if not tryForwards() or tryForwards() then return false end
+    if not tryForwards() or not tryForwards() then return false end
     turnAround()
     return true
 end
@@ -212,8 +214,14 @@ end
 
 -- placing torches every five blocks
 local function digAscentShaft()
+    if tryDown() then
+        turtle.dig() -- remove first block on top of pillar
+    else
+        return false
+    end
+
     while tryDown() do
-        if fmod(depth,5) == 0 then -- place torch on side
+        if math.fmod(depth,5) == 0 then -- place torch on side
             turnRight()
             turtle.dig()
             turtle.select(16)
@@ -221,18 +229,8 @@ local function digAscentShaft()
             turnLeft()
         end
 
-        -- go forwards one, turn around and place ladder, move forward
-        -- replace block behind
-        if not tryForwards() then return false end
-        turnAround()
         turtle.select(12) -- select ladder or vine
-        turtle.place()
-        if not tryForwards() then return false end
-        -- only replace the block if depth is > 1
-        if depth > 1 and selectCobblestone() then
-            turtle.place()
-        end
-        turnAround()
+        turtle.placeUp()
     end
     return true;
 end
@@ -261,7 +259,6 @@ local function digToSurface()
     end
     return true
 end
-
 if not refuel() then
     print( "Out of Fuel" )
     return
@@ -271,6 +268,7 @@ digAlcove()
 digAscentShaft()
 pillarUp(3)
 
+--[[
 if not tryForwards() then
     print("Could not go forwards")
     return
@@ -308,4 +306,5 @@ end
 
 digToSurface()
 
+--]]
 
