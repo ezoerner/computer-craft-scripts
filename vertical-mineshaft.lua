@@ -268,7 +268,6 @@ digAlcove()
 digAscentShaft()
 pillarUp(3)
 
---[[
 if not tryForwards() then
     print("Could not go forwards")
     return
@@ -305,6 +304,3 @@ for n=1,3 do
 end
 
 digToSurface()
-
---]]
-
