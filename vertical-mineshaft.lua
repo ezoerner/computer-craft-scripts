@@ -249,7 +249,7 @@ end
 local function digToSurface()
     while depth > 0 do
 
-        if fmod(depth,5) == 0 then -- place torch forward
+        if math.fmod(depth,5) == 0 then -- place torch forward
             turtle.dig()
             turtle.select(16)
             turtle.place()
