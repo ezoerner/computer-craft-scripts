@@ -34,6 +34,6 @@ Prepare the turtle with the following inventory. This assumes the shaft is start
 - slot 16: 24+ torches
 - slot 15: water bucket
 - slot 14: water bucket
-- slot 13: about 60 ladders or vines
+- slot 13: about 60 ladders (apparently vines don't work)
 - slot 12: 1+ cobblestone, used for comparison purposes.
 - any slot 11 or less: fuel, only a handful of coal should be needed
