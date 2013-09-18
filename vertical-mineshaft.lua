@@ -8,13 +8,18 @@ Prepare the turtle with the following inventory. This assumes the shaft is start
 - slot 16: 24+ torches
 - slot 15: water bucket
 - slot 14: water bucket
-- slot 13: water bucket
-- slot 12: about 60 ladders or vines
-- slot 11: 1+ cobblestone, used for comparison purposes.
-- slot 10: fuel, only a handful of coal should be needed
+- slot 13: about 60 ladders or vines
+- slot 12: 1+ cobblestone, used for comparison purposes.
+- any slot 11 or less: fuel, only a handful of coal should be needed
 ]]
 
-local maxSlot = 10
+local maxSlot = 11
+
+local torchSlot = 16
+local bucket1Slot = 15
+local bucket2Slot = 14
+local ladderSlot = 13
+local cobblestoneSlot = 12
 
 local depth = 0
 local unloaded = 0
@@ -201,11 +206,12 @@ local function selectCobblestone()
     for n=1,maxSlot do
         if turtle.getItemCount(n) > 0 then
             turtle.select(n)
-            if turtle.compareTo(11) then
+            -- prefer to use collected cobblestone instead of the cobblestone slot itself
+            if turtle.compareTo(cobblestoneSlot) then
                 return true
                 -- if no cobblestone elsewhere (unlikely) then
-                -- use slot 11 if more than one there
-            elseif turtle.getItemCount(11) > 1 then
+                -- use the cobblestone slot directly if more than one there
+            elseif turtle.getItemCount(cobblestoneSlot) > 1 then
                 turtle.select(11)
                 return true
             end
@@ -226,12 +232,12 @@ local function digAscentShaft()
         if math.fmod(depth,5) == 0 then -- place torch on side
             turnRight()
             turtle.dig()
-            turtle.select(16)
+            turtle.select(torchSlot)
             turtle.place()
             turnLeft()
         end
 
-        turtle.select(12) -- select ladder or vine
+        turtle.select(ladderSlot) -- select ladder or vine
         turtle.placeUp()
     end
     return true;
@@ -289,7 +295,7 @@ local function digUtilityRoom()
     end
     if not tryUp() then return false end
     turnAround()
-    for n=1,6 do
+    for n=1,5 do
         if not tryForwards() then return false end
     end
     turnAround()
@@ -317,27 +323,66 @@ local function digUtilityRoom()
     for n=1,4 do
         if not tryForwards() then return false end
     end
+    -- leave turtle down and facing the wall
+    if not tryDown() then return false end
+    turnLeft()
     return true
 end
 
 local function digWaterTrough()
+    if not tryForwards() then return false end
+    turnLeft()
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnAround()
+    if not tryDown() then return false end
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    if not tryUp() then return false end
+    turnAround()
+    -- place one water at each end
+    if not turtle.select(bucket1Slot) or not turtle.placeDown() then return false end
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    if not turtle.select(bucket2Slot) or not turtle.placeDown() then return false end
+
+    -- now move into position of middle of water trough to start moving water
+    turnAround()
+    if not tryForwards() then return false end
+    turnRight()
     return true
 end
 
 local function placeWaterInPit()
-    --[[
-        -- for now place the three water buckets
-        -- an improvement later will be to use only two buckets to create
-        -- an infinite water trough and use that to generate three water
-        for n=1,3 do
-            if not tryUp() then
-                return false
-            end
-            if not turtle.select(12+n) or not turtle.placeDown() then
-                return false
-            end
+    turtle.select(bucket1Slot)
+    for b=1,3 do -- 3 water buckets
+        -- pick up water
+        if not turtle.placeDown() then return false end
+        if not tryForwards() then return false end
+        if not tryForwards() then return false end
+        turnLeft()
+        if not tryForwards() then return false end
+        if not tryForwards() then return false end
+        if not tryForwards() then return false end
+        turnRight()
+        if not tryForwards() then return false end
+        -- place bucket of water
+        if not turtle.placeDown() then return false end
+
+        -- if not done go get another bucket
+        if b < 3 then
+            turnAround()
+            if not tryForwards() then return false end
+            turnLeft()
+            if not tryForwards() then return false end
+            if not tryForwards() then return false end
+            if not tryForwards() then return false end
+            turnRight()
+            if not tryForwards() then return false end
+            if not tryForwards() then return false end
+            turnAround()
         end
-    ]]
+    end
     return true
 end
 
@@ -347,7 +392,7 @@ local function digToSurface()
 
         if math.fmod(depth,5) == 0 then -- place torch forward
             turtle.dig()
-            turtle.select(16)
+            turtle.select(torchSlot)
             turtle.place()
         end
 
@@ -367,7 +412,6 @@ digAscentShaft()
 -- and we want to be about six blocks up anyway for the best mining
 pillarUp(6)
 digBottomArea()
-if digUtilityRoom() and digWaterTrough() then
-    placeWaterInPit()
+if digUtilityRoom() and digWaterTrough() and placeWaterInPit() then
+    digToSurface()
 end
---digToSurface()
