@@ -39,13 +39,15 @@ local function selectCobblestone()
             -- prefer to use collected cobblestone instead of the cobblestone slot itself
             if turtle.compareTo(cobblestoneSlot) then
                 return true
-                -- if no cobblestone elsewhere (unlikely) then
-                -- use the cobblestone slot directly if more than one there
-            elseif turtle.getItemCount(cobblestoneSlot) > 1 then
-                turtle.select(11)
-                return true
             end
         end
+    end
+
+    -- if we get here there there is no cobblestone elsewhere in the inventory, so
+    -- use the cobblestone slot directly if more than one there
+    if turtle.getItemCount(cobblestoneSlot) > 1 then
+        turtle.select(cobblestoneSlot)
+        return true
     end
     return false
 end
@@ -175,7 +177,7 @@ local function digUtilityRoom()
     for n=1,4 do
         if not tryForwards() then return false end
     end
-    
+
     -- leave turtle down and facing the wall
     if not tryDown() then return false end
     turnLeft()
@@ -208,34 +210,19 @@ end
 
 local function placeWaterInPit()
     turtle.select(bucket1Slot)
-    for b=1,3 do -- 3 water buckets
-        -- pick up water
-        if not turtle.placeDown() then return false end
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        turnLeft()
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        turnRight()
-        if not tryForwards() then return false end
-        -- place bucket of water
-        if not turtle.placeDown() then return false end
-
-        -- if not done go get another bucket
-        if b < 3 then
-            turnAround()
-            if not tryForwards() then return false end
-            turnLeft()
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            turnRight()
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            turnAround()
-        end
-    end
+    -- pick up water
+    if not turtle.placeDown() then return false end
+    -- bring water to the pit
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnLeft()
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnRight()
+    if not tryForwards() then return false end
+    -- place bucket of water
+    if not turtle.placeDown() then return false end
     return true
 end
 
