@@ -5,10 +5,11 @@ collected = 0
 xPos,zPos = 0,0
 xDir,zDir = 0,1
 
+maxSlot = maxSlot or 16
 
 function unload( _bKeepOneFuelStack )
     print( "Unloading items..." )
-    for n=1,16 do
+    for n=1,maxSlot do
         local nCount = turtle.getItemCount(n)
         if nCount > 0 then
             turtle.select(n)
@@ -50,7 +51,7 @@ end
 function collect()
     local bFull = true
     local nTotalItems = 0
-    for n=1,16 do
+    for n=1,maxSlot do
         local nCount = turtle.getItemCount(n)
         if nCount == 0 then
             bFull = false
@@ -72,16 +73,16 @@ function collect()
     return true
 end
 
-function refuel( ammount )
+function refuel( amount )
     local fuelLevel = turtle.getFuelLevel()
     if fuelLevel == "unlimited" then
         return true
     end
 
-    local needed = ammount or (xPos + zPos + depth + 2)
+    local needed = amount or (xPos + zPos + depth + 2)
     if turtle.getFuelLevel() < needed then
         local fueled = false
-        for n=1,16 do
+        for n=1,maxSlot do
             if turtle.getItemCount(n) > 0 then
                 turtle.select(n)
                 if turtle.refuel(1) then
@@ -163,6 +164,39 @@ function tryDown()
     return true
 end
 
+function tryUp()
+    if not refuel() then
+        print( "Not enough Fuel" )
+        return false
+    end
+
+    while not turtle.up() do
+        if turtle.detectUp() then
+            if turtle.digUp() then
+                if not collect() then
+                    return false
+                end
+            else
+                return false
+            end
+        elseif turtle.attackUp() then
+            if not collect() then
+                return false
+            end
+        else
+            sleep( 0.5 )
+        end
+    end
+
+    depth = depth - 1
+    if math.fmod( depth, 10 ) == 0 then
+        print( "Ascended to "..depth.." metres." )
+    end
+
+    return true
+end
+
+
 function turnLeft()
     turtle.turnLeft()
     xDir, zDir = -zDir, xDir
@@ -171,6 +205,11 @@ end
 function turnRight()
     turtle.turnRight()
     xDir, zDir = zDir, -xDir
+end
+
+function turnAround()
+    turnRight()
+    turnRight()
 end
 
 function goTo( x, y, z, xd, zd )
