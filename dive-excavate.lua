@@ -2,7 +2,7 @@ shell.run("common.lua")
 
 local tArgs = { ... }
 if #tArgs ~= 1 then
-    print( "Usage: excavate <diameter>" )
+    print( "Usage: dive-excavate <diameter>" )
     return
 end
 
