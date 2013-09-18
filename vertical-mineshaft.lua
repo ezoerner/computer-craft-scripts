@@ -119,40 +119,63 @@ local function digUtilityRoom()
     turnAround()
     if not tryForwards() then return false end
     turnLeft()
-    -- middle of room
+
+    -- lower middle of room
     for n=1,6 do
         if not tryForwards() then return false end
     end
+
     if not tryUp() then return false end
     turnAround()
-    for n=1,5 do
+    -- move one block away from wall then place torch
+    if not tryForwards() then return false end
+    turnAround()
+    turtle.select(torchSlot)
+    turtle.place();
+    turnAround()
+
+    -- rest of upper middle of room
+    for n=1,4 do
         if not tryForwards() then return false end
     end
+
+    -- go back one
     turnAround()
     if not tryForwards() then return false end
+
+    -- upper left part of room
     turnLeft()
     tryForwards()
     turnRight()
     for n=1,4 do
         if not tryForwards() then return false end
     end
+
+    -- lower left part of room
     if not tryDown() then return false end
     turnAround()
     for n=1,4 do
         if not tryForwards() then return false end
     end
+
+    -- move to right part of room
     turnLeft()
     if not tryForwards() then return false end
     if not tryForwards() then return false end
     turnLeft()
+
+    -- lower right
     for n=1,4 do
         if not tryForwards() then return false end
     end
     if not tryUp() then return false end
     turnAround()
+
+    -- upper right
     for n=1,4 do
         if not tryForwards() then return false end
     end
+    
     -- leave turtle down and facing the wall
     if not tryDown() then return false end
     turnLeft()
