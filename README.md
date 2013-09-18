@@ -28,13 +28,13 @@ vertical-mineshaft.lua
 ----------------------
 Based on ["Vertical mineshaft with water drop"](http://www.minecraftwiki.net/wiki/Mining#Vertical_mineshaft_with_water_drop).
 
-Start with turtle at level that will be top of shaft and facing forward to what will be the alcove
+Start with turtle at level that will be top of shaft and facing forward to what will become the alcove.
 
-Prepare the turtle with the following inventory:
+Prepare the turtle with the following inventory. This assumes the shaft is started at about sea level.
 - slot 16: 24+ torches
 - slot 15: water bucket
 - slot 14: water bucket
 - slot 13: water bucket
-- slot 12: 64 ladders or vines
-- slot 11: 1+ cobblestone, used for comparison
-- slot 10: fuel (how many coal are needed?)
+- slot 12: about 60 ladders or vines
+- slot 11: 1+ cobblestone, used for comparison purposes.
+- slot 10: fuel, only a handful of coal should be needed
