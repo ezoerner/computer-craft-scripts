@@ -175,7 +175,7 @@ local function digUtilityRoom()
     for n=1,4 do
         if not tryForwards() then return false end
     end
-    
+
     -- leave turtle down and facing the wall
     if not tryDown() then return false end
     turnLeft()
@@ -208,7 +208,7 @@ end
 
 local function placeWaterInPit()
     turtle.select(bucket1Slot)
-    for b=1,3 do -- 3 water buckets
+    --for b=1,3 do -- only one water bucket is actually necessary to fill the three-block pit...
         -- pick up water
         if not turtle.placeDown() then return false end
         if not tryForwards() then return false end
@@ -222,6 +222,7 @@ local function placeWaterInPit()
         -- place bucket of water
         if not turtle.placeDown() then return false end
 
+--[[
         -- if not done go get another bucket
         if b < 3 then
             turnAround()
@@ -235,7 +236,8 @@ local function placeWaterInPit()
             if not tryForwards() then return false end
             turnAround()
         end
-    end
+]]
+    --end
     return true
 end
 
