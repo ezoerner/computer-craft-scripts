@@ -39,13 +39,15 @@ local function selectCobblestone()
             -- prefer to use collected cobblestone instead of the cobblestone slot itself
             if turtle.compareTo(cobblestoneSlot) then
                 return true
-                -- if no cobblestone elsewhere (unlikely) then
-                -- use the cobblestone slot directly if more than one there
-            elseif turtle.getItemCount(cobblestoneSlot) > 1 then
-                turtle.select(11)
-                return true
             end
         end
+    end
+
+    -- if we get here there there is no cobblestone elsewhere in the inventory, so
+    -- use the cobblestone slot directly if more than one there
+    if turtle.getItemCount(cobblestoneSlot) > 1 then
+        turtle.select(cobblestoneSlot)
+        return true
     end
     return false
 end
