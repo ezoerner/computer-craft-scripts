@@ -269,18 +269,9 @@ local function digBottomArea()
             return false
         end
     end
-    return true
-end
-
-local function placeWaterInPit()
-    -- for now place the three water buckets
-    -- an improvement later will be to use only two buckets to create
-    -- an infinite water trough and use that to generate three water
+    -- move back up to floor level
     for n=1,3 do
         if not tryUp() then
-            return false
-        end
-        if not turtle.select(12+n) or not turtle.placeDown() then
             return false
         end
     end
@@ -289,8 +280,65 @@ end
 
 local function digUtilityRoom()
  -- turtle is now sitting on top of the water pit facing the wall
+    turnAround()
+    if not tryForwards() then return false end
+    turnLeft()
+    -- middle of room
+    for n=1,6 do
+        if not tryForwards() then return false end
+    end
+    if not tryUp() then return false end
+    turnAround()
+    for n=1,6 do
+        if not tryForwards() then return false end
+    end
+    turnAround()
+    if not tryForwards() then return false end
+    turnLeft()
+    tryForwards()
+    turnRight()
+    for n=1,4 do
+        if not tryForwards() then return false end
+    end
+    if not tryDown() then return false end
+    turnAround()
+    for n=1,4 do
+        if not tryForwards() then return false end
+    end
+    turnLeft()
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnLeft()
+    for n=1,4 do
+        if not tryForwards() then return false end
+    end
+    if not tryUp() then return false end
+    turnAround()
+    for n=1,4 do
+        if not tryForwards() then return false end
+    end
+    return true
+end
 
+local function digWaterTrough()
+    return true
+end
 
+local function placeWaterInPit()
+    --[[
+        -- for now place the three water buckets
+        -- an improvement later will be to use only two buckets to create
+        -- an infinite water trough and use that to generate three water
+        for n=1,3 do
+            if not tryUp() then
+                return false
+            end
+            if not turtle.select(12+n) or not turtle.placeDown() then
+                return false
+            end
+        end
+    ]]
+    return true
 end
 
 -- placing torches every five blocks
@@ -319,6 +367,7 @@ digAscentShaft()
 -- and we want to be about six blocks up anyway for the best mining
 pillarUp(6)
 digBottomArea()
-placeWaterInPit() -- to be moved to after utility room
-digUtilityRoom()
-digToSurface()
+if digUtilityRoom() and digWaterTrough() then
+    placeWaterInPit()
+end
+--digToSurface()
