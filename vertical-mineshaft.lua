@@ -210,36 +210,19 @@ end
 
 local function placeWaterInPit()
     turtle.select(bucket1Slot)
-    --for b=1,3 do -- only one water bucket is actually necessary to fill the three-block pit...
-        -- pick up water
-        if not turtle.placeDown() then return false end
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        turnLeft()
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        if not tryForwards() then return false end
-        turnRight()
-        if not tryForwards() then return false end
-        -- place bucket of water
-        if not turtle.placeDown() then return false end
-
---[[
-        -- if not done go get another bucket
-        if b < 3 then
-            turnAround()
-            if not tryForwards() then return false end
-            turnLeft()
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            turnRight()
-            if not tryForwards() then return false end
-            if not tryForwards() then return false end
-            turnAround()
-        end
-]]
-    --end
+    -- pick up water
+    if not turtle.placeDown() then return false end
+    -- bring water to the pit
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnLeft()
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    if not tryForwards() then return false end
+    turnRight()
+    if not tryForwards() then return false end
+    -- place bucket of water
+    if not turtle.placeDown() then return false end
     return true
 end
 
