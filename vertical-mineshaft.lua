@@ -244,25 +244,6 @@ local function pillarUp(n)
     end
 end
 
--- placing torches every five blocks
-local function digToSurface()
-    while depth > 0 do
-
-        if math.fmod(depth,5) == 0 then -- place torch forward
-            turtle.dig()
-            turtle.select(16)
-            turtle.place()
-        end
-
-        if not tryUp() then return false end
-    end
-    return true
-end
-if not refuel() then
-    print( "Out of Fuel" )
-    return
-end
-
 local function digBottomArea()
     if not tryForwards() then
         print("Could not go forwards")
@@ -279,7 +260,7 @@ local function digBottomArea()
         return false
     end
 
-    -- go down one plus three more for the water pit
+    -- go down one plus three more to make room for the water pit
     for n=1,4 do
         if not tryDown() then
             print("Could not go down")
@@ -289,7 +270,7 @@ local function digBottomArea()
     return true
 end
 
-local function placeWaterPit()
+local function placeWaterInPit()
     -- for now place the three water buckets
     -- an improvement later will be to use only two buckets to create
     -- an infinite water trough and use that to generate three water
@@ -305,13 +286,37 @@ local function placeWaterPit()
 end
 
 local function digUtilityRoom()
+ -- turtle is now sitting on top of the water pit facing the wall
 
+
+end
+
+-- placing torches every five blocks
+local function digToSurface()
+    while depth > 0 do
+
+        if math.fmod(depth,5) == 0 then -- place torch forward
+            turtle.dig()
+            turtle.select(16)
+            turtle.place()
+        end
+
+        if not tryUp() then return false end
+    end
+    return true
+end
+
+if not refuel() then
+    print( "Out of Fuel" )
+    return
 end
 
 digAlcove()
 digAscentShaft()
-pillarUp(3)
+-- pillar up an extra couple blocks to allow for irregularity in bedrock
+-- and we want to be about six blocks up anyway for the best mining
+pillarUp(6)
 digBottomArea()
-placeWaterPit()
+placeWaterInPit() -- to be moved to after utility room
 digUtilityRoom()
 digToSurface()
