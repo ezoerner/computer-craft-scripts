@@ -222,6 +222,7 @@ local function placeWaterInPit()
     turnRight()
     if not tryForwards() then return false end
     -- place bucket of water
+    turtle.select(bucket1Slot)
     if not turtle.placeDown() then return false end
     return true
 end
