@@ -242,6 +242,14 @@ local function digToSurface()
     return true
 end
 
+local function moveBackToStart()
+    turnAround()
+    for n=1,3 do
+        if not tryForwards() then return false end
+    end
+    turnAround()
+end
+
 if not refuel() then
     print( "Out of Fuel" )
     return
@@ -253,6 +261,6 @@ digAscentShaft()
 -- and we want to be about six blocks up anyway for the best mining
 pillarUp(6)
 digBottomArea()
-if digUtilityRoom() and digWaterTrough() and placeWaterInPit() then
-    digToSurface()
+if digUtilityRoom() and digWaterTrough() and placeWaterInPit() and digToSurface() then
+    moveBackToStart()
 end
