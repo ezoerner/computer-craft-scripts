@@ -32,26 +32,6 @@ local function digAlcove()
     return true
 end
 
-local function selectCobblestone()
-    for n=1,maxSlot do
-        if turtle.getItemCount(n) > 0 then
-            turtle.select(n)
-            -- prefer to use collected cobblestone instead of the cobblestone slot itself
-            if turtle.compareTo(cobblestoneSlot) then
-                return true
-            end
-        end
-    end
-
-    -- if we get here there there is no cobblestone elsewhere in the inventory, so
-    -- use the cobblestone slot directly if more than one there
-    if turtle.getItemCount(cobblestoneSlot) > 1 then
-        turtle.select(cobblestoneSlot)
-        return true
-    end
-    return false
-end
-
 -- placing torches every five blocks
 local function digAscentShaft()
     if tryDown() then
@@ -78,7 +58,7 @@ end
 local function pillarUp(n)
     -- collect ladders?
     for n=1,n do
-        if tryUp() and selectCobblestone() then
+        if tryUp() and selectCobblestone(cobblestoneSlot) then
             turtle.placeDown()
         end
     end
@@ -258,7 +238,7 @@ end
 digAlcove()
 digAscentShaft()
 -- pillar up an extra couple blocks to allow for irregularity in bedrock
--- and we want to be about six blocks up anyway for the best mining
+-- and we want to be about six to seven blocks up anyway for the best mining above lava level
 pillarUp(6)
 digBottomArea()
 if digUtilityRoom() and digWaterTrough() and placeWaterInPit() and digToSurface() then

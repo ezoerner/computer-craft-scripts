@@ -103,6 +103,31 @@ function refuel( amount )
     return true
 end
 
+local function tryDigUp()
+    while turtle.detectUp() do
+        if turtle.digUp() then
+            collect()
+            sleep(0.5)
+        else
+            return false
+        end
+    end
+    return true
+end
+
+
+function tryDig()
+    while turtle.detect() do
+        if turtle.dig() then
+            collect()
+            sleep(0.5)
+        else
+            return false
+        end
+    end
+    return true
+end
+
 function tryForwards()
     if not refuel() then
         print( "Not enough Fuel" )
@@ -172,11 +197,7 @@ function tryUp()
 
     while not turtle.up() do
         if turtle.detectUp() then
-            if turtle.digUp() then
-                if not collect() then
-                    return false
-                end
-            else
+            if not tryDigUp() then
                 return false
             end
         elseif turtle.attackUp() then
@@ -210,6 +231,29 @@ end
 function turnAround()
     turnRight()
     turnRight()
+end
+
+-- use a designated slot with cobblestone in it to select any other
+-- slot with cobblestone in it, using the designated cobblestone
+-- slot as a last resort if there is no other
+local function selectCobblestone(designatedCobblestoneSlot)
+    for n=1,maxSlot do
+        if turtle.getItemCount(n) > 0 then
+            turtle.select(n)
+            -- prefer to use collected cobblestone instead of the cobblestone slot itself
+            if turtle.compareTo(designatedCobblestoneSlot) then
+                return true
+            end
+        end
+    end
+
+    -- if we get here there there is no cobblestone elsewhere in the inventory, so
+    -- use the cobblestone slot directly if more than one there
+    if turtle.getItemCount(designatedCobblestoneSlot) > 1 then
+        turtle.select(designatedCobblestoneSlot)
+        return true
+    end
+    return false
 end
 
 function goTo( x, y, z, xd, zd )
