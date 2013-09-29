@@ -8,8 +8,8 @@
 -- The program will try to continue until numBranches have been mined.
 
 -- To prepare:
--- slot 16 torches
--- slot 15 cobblestone
+-- slot 16: torches
+-- slot 15: cobblestone
 -- fuel in any other slot(s)
 
 maxSlot = 14

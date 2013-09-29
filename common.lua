@@ -103,7 +103,7 @@ function refuel( amount )
     return true
 end
 
-local function tryDigUp()
+function tryDigUp()
     while turtle.detectUp() do
         if turtle.digUp() then
             collect()
@@ -236,7 +236,7 @@ end
 -- use a designated slot with cobblestone in it to select any other
 -- slot with cobblestone in it, using the designated cobblestone
 -- slot as a last resort if there is no other
-local function selectCobblestone(designatedCobblestoneSlot)
+function selectCobblestone(designatedCobblestoneSlot)
     for n=1,maxSlot do
         if turtle.getItemCount(n) > 0 then
             turtle.select(n)
