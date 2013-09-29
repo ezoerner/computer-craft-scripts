@@ -117,6 +117,7 @@ unload( true )
 turnAround()
 return -- stop here debug
 
+--[[
 -- Begin branches
 local branchesMined = 0
 while true do
@@ -147,3 +148,4 @@ end
 goTo( 0,0,0,0,-1 )
 unload(false)
 turnAround()
+]]
