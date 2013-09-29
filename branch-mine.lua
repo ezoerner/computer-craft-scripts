@@ -58,10 +58,10 @@ function tunnel(length,torchInterval)
     print( "Tunnelling..." )
     for n=1,length do
         if selectCobblestone(cobblestoneSlot) then
-            turtle.placeDown()
+            turtle.placeDown() -- try to see to it that there's some floor(?)...
         end
         tryDigUp()
-        turtle.turnLeft()
+        turnLeft()
         tryDig()
         tryUp()
         tryDig()
@@ -75,7 +75,7 @@ function tunnel(length,torchInterval)
         end
         tryDown()
         tryDig()
-        turtle.turnLeft()
+        turnLeft()
 
         if n<length then
             tryDig()
@@ -96,6 +96,8 @@ function mineBranch()
         end
     end
     tryDig()
+    tryUp()
+    tryDig()
     turtle.select(torchSlot)
     turtle.place()
     turnAround()
@@ -104,6 +106,7 @@ function mineBranch()
             return false
         end
     end
+    tryDown()
     return true
 end
 
