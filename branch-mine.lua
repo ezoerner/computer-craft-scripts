@@ -115,6 +115,7 @@ tunnel(accessShaftLength, 5)
 goTo( 0,0,0,0,-1 )
 unload( true )
 turnAround()
+return -- stop here debug
 
 -- Begin branches
 local branchesMined = 0
