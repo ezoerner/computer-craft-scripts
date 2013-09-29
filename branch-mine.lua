@@ -67,7 +67,7 @@ function tunnel(length,torchInterval)
         tryDig()
         turnAround()
         tryDig()
-        if n >= nextTorchPlacement then
+        if n >= nextTorchPlacement and math.fmod(n,branchInterval) > 0 then
             turtle.select(torchSlot)
             if turtle.place() then
                 nextTorchPlacement = n + torchInterval
@@ -115,9 +115,7 @@ tunnel(accessShaftLength, 5)
 goTo( 0,0,0,0,-1 )
 unload( true )
 turnAround()
-return -- stop here debug
 
---[[
 -- Begin branches
 local branchesMined = 0
 while true do
@@ -148,4 +146,3 @@ end
 goTo( 0,0,0,0,-1 )
 unload(false)
 turnAround()
-]]
