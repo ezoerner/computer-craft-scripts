@@ -119,7 +119,7 @@ turnAround()
 -- Begin branches
 local branchesMined = 0
 while true do
-    for n=1,(branchInterval-1) do
+    for n=1,branchInterval do
         tryForwards()
     end
     turnLeft()
