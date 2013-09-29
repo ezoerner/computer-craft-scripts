@@ -144,5 +144,5 @@ end
 
 -- attempt to return to beginning and unload
 goTo( 0,0,0,0,-1 )
-unload( true )
+unload(false)
 turnAround()
