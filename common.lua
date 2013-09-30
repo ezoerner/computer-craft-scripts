@@ -30,7 +30,7 @@ end
 
 function returnSupplies()
     local x,y,z,xd,zd = xPos,depth,zPos,xDir,zDir
-    print( "Returning to surface..." )
+    print( "Returning to start position..." )
     goTo( 0,0,0,0,-1 )
 
     local fuelNeeded = 2*(x+y+z) + 1
@@ -85,18 +85,22 @@ function refuel( amount )
         for n=1,maxSlot do
             if turtle.getItemCount(n) > 0 then
                 turtle.select(n)
+                print("Trying to refuel from slot "..n)
                 if turtle.refuel(1) then
+                    print("Continue refueling from slot "..n)
                     while turtle.getItemCount(n) > 0 and turtle.getFuelLevel() < needed do
                         turtle.refuel(1)
                     end
                     if turtle.getFuelLevel() >= needed then
                         turtle.select(1)
+                        print("Successfully finished refueling from slot "..n)
                         return true
                     end
                 end
             end
         end
         turtle.select(1)
+        print("Unable to fuel sufficiently, needed "..needed)
         return false
     end
 
@@ -141,6 +145,7 @@ function tryForwards()
                     returnSupplies()
                 end
             else
+                print("Unable to dig forward")
                 return false
             end
         elseif turtle.attack() then
