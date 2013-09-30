@@ -100,7 +100,6 @@ function refuel( amount )
             end
         end
         turtle.select(1)
-        print("Unable to fuel sufficiently, needed "..needed)
         return false
     end
 
