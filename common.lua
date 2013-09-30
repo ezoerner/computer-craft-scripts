@@ -192,7 +192,7 @@ end
 function tryUp()
     if not refuel() then
         print( "Not enough Fuel" )
-        return false
+        returnSupplies()
     end
 
     while not turtle.up() do
