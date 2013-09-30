@@ -47,7 +47,7 @@ function tunnel(length)
         tryDig()
         turnAround()
         tryDig()
-        if n >= nextTorchPlacement > 0 then
+        if n >= nextTorchPlacement then
             turtle.select(torchSlot)
             if turtle.place() then
                 nextTorchPlacement = n + torchInterval
