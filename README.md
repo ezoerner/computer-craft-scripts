@@ -23,6 +23,10 @@ builds a stairway around the perimeter of an existing excavation site.
 torch-tunnel.lua
 ----------------
 Same as the stock tunnel, but also places torches every 5 blocks.
+To prepare:
+- slot 16: torches
+- slot 15: cobblestone
+- fuel in any other slot(s)
 
 vertical-mineshaft.lua
 ----------------------
@@ -37,3 +41,17 @@ Prepare the turtle with the following inventory. This assumes the shaft is start
 - slot 13: about 60 ladders (apparently vines don't work)
 - slot 12: 1+ cobblestone, used for comparison purposes.
 - any slot 11 or less: fuel, only a handful of coal should be needed
+
+branches.lua
+------------
+Does branch mining.
+Usage: branches.lua <branchLength> <numBranches> [<branchInterval>]
+Digs branches off a 3x2 access shaft presumed to have already been dug.
+Each branch is <branchLength> and branches occur every
+<branchInterval> blocks (defaults to 3 if not provided, or if specified then must be at least 2).
+The program will try to continue until numBranches have been mined.
+
+To prepare:
+- slot 16: torches
+- slot 15: cobblestone
+- fuel in any other slot(s)
