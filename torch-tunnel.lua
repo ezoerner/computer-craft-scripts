@@ -38,7 +38,7 @@ function tunnel(length)
     print( "Tunnelling..." )
     for n=1,length do
         if selectCobblestone(cobblestoneSlot) then
-            turtle.placeDown() -- try to see to it that there's some floor(?)...
+            turtle.placeDown() -- try to see to it that there's some floor...
         end
         tryDigUp()
         turnLeft()
