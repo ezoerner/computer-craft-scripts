@@ -1,192 +1,77 @@
--- put a stack of torches in slot 16
+-- Usage: torch-tunnel.lua <tunnelLength> <torchInterval>
+-- digs a 3 wide by 2 high access shaft of <tunnelLength>
+-- centered width-wise on the beginning position of the turtle.
+-- Will place torches in the tunnel every <torchInterval>
+
+-- To prepare:
+-- slot 16: torches
+-- slot 15: cobblestone
+-- fuel in any other slot(s)
+
+maxSlot = 14
+shell.run("common.lua")
+
+-- designated slots
+local cobblestoneSlot = 15
+local torchSlot = 16
 
 local tArgs = { ... }
-if #tArgs ~= 1 then
-    print( "Usage: tunnel <length>" )
+if #tArgs ~= 2 then
+    print( "Usage: torch-tunnel.lua <tunnelLength> <torchInterval>" )
     return
 end
 
--- Mine in a quarry pattern until we hit something we can't dig
-local length = tonumber( tArgs[1] )
-if length < 1 then
-    print( "Tunnel length must be positive" )
+local tunnelLength = tonumber( tArgs[1] )
+if tunnelLength < 1 then
+    print( "tunnel length must be positive" )
     return
 end
 
-local depth = 0
-local collected = 0
-
-local function collect()
-    collected = collected + 1
-    if math.fmod(collected, 25) == 0 then
-        print( "Mined "..collected.." items." )
-    end
+local torchInterval = tonumber(tArgs[2])
+if torchInterval < 1 then
+    print("torch interval must be positive")
+    return
 end
 
-local function tryDig()
-    while turtle.detect() do
-        if turtle.dig() then
-            collect()
-            sleep(0.5)
-        else
-            return false
+function tunnel(length)
+    local nextTorchPlacement = torchInterval
+    print( "Tunnelling..." )
+    for n=1,length do
+        if selectCobblestone(cobblestoneSlot) then
+            turtle.placeDown() -- try to see to it that there's some floor(?)...
         end
-    end
-    return true
-end
-
-local function tryDigUp()
-    while turtle.detectUp() do
-        if turtle.digUp() then
-            collect()
-            sleep(0.5)
-        else
-            return false
-        end
-    end
-    return true
-end
-
-local function tryDigDown()
-    while turtle.detectDown() do
-        if turtle.digDown() then
-            collect()
-            sleep(0.5)
-        else
-            return false
-        end
-    end
-    return true
-end
-
-local function refuel()
-    local fuelLevel = turtle.getFuelLevel()
-    if fuelLevel == "unlimited" or fuelLevel > 0 then
-        return
-    end
-
-    local function tryRefuel()
-        for n=1,15 do
-            if turtle.getItemCount(n) > 0 then
-                turtle.select(n)
-                if turtle.refuel(1) then
-                    turtle.select(1)
-                    return true
-                end
-            end
-        end
-        turtle.select(1)
-        return false
-    end
-
-    if not tryRefuel() then
-        print( "Add more fuel to continue." )
-        while not tryRefuel() do
-            sleep(1)
-        end
-        print( "Resuming Tunnel." )
-    end
-end
-
-local function tryUp()
-    refuel()
-    while not turtle.up() do
-        if turtle.detectUp() then
-            if not tryDigUp() then
-                return false
-            end
-        elseif turtle.attackUp() then
-            collect()
-        else
-            sleep( 0.5 )
-        end
-    end
-    return true
-end
-
-local function tryDown()
-    refuel()
-    while not turtle.down() do
-        if turtle.detectDown() then
-            if not tryDigDown() then
-                return false
-            end
-        elseif turtle.attackDown() then
-            collect()
-        else
-            sleep( 0.5 )
-        end
-    end
-    return true
-end
-
-local function tryForward()
-    refuel()
-    while not turtle.forward() do
-        if turtle.detect() then
-            if not tryDig() then
-                return false
-            end
-        elseif turtle.attack() then
-            collect()
-        else
-            sleep( 0.5 )
-        end
-    end
-    return true
-end
-
-print( "Tunnelling..." )
-
-for n=1,length do
-    turtle.placeDown()
-    tryDigUp()
-    turtle.turnLeft()
-    tryDig()
-    tryUp()
-    tryDig()
-    turtle.turnRight()
-    turtle.turnRight()
-    tryDig()
-
-    if math.fmod(n, 5) == 0 then
-        turtle.select(16)
-        turtle.place()
-        turtle.select(1)
-    end
-
-    tryDown()
-    tryDig()
-    turtle.turnLeft()
-
-    if n<length then
+        tryDigUp()
+        turnLeft()
         tryDig()
-        if not tryForward() then
-            print( "Aborting Tunnel." )
-            break
+        tryUp()
+        tryDig()
+        turnAround()
+        tryDig()
+        if n >= nextTorchPlacement and math.fmod(n-1,branchInterval) > 0 then
+            turtle.select(torchSlot)
+            if turtle.place() then
+                nextTorchPlacement = n + torchInterval
+            end
         end
-    else
-        print( "Tunnel complete." )
+        tryDown()
+        tryDig()
+        turnLeft()
+
+        if n<length then
+            tryDig()
+            if not tryForwards() then
+                print( "Aborting Tunnel." )
+                break
+            end
+        else
+            print( "Tunnel complete." )
+        end
     end
-
 end
 
---[[
-print( "Returning to start..." )
+tunnel(tunnelLength, torchInterval)
 
--- Return to where we started
-turtle.turnLeft()
-turtle.turnLeft()
-while depth > 0 do
-	if turtle.forward() then
-		depth = depth - 1
-	else
-		turtle.dig()
-	end
-end
-turtle.turnRight()
-turtle.turnRight()
-]]
-
-print( "Tunnel complete." )
-print( "Mined "..collected.." items total." )
+-- attempt to return to beginning and unload
+goTo( 0,0,0,0,-1 )
+unload(false)
+turnAround()
