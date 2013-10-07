@@ -2,6 +2,7 @@ computer-craft
 ==============
 
 Scripts to run in Minecraft with the ComputerCraft mod. http://www.computercraft.info
+Currently these scripts are all for turtles.
 
 common.lua
 ----------
@@ -22,7 +23,9 @@ builds a stairway around the perimeter of an existing excavation site.
 
 torch-tunnel.lua
 ----------------
-Same as the stock tunnel, but also places torches every 5 blocks.
+Usage: torch-tunnel.lua &lt;tunnelLength> &lt;torchInterval>
+
+Same as the stock tunnel, but also places torches every <torchInterval> blocks.
 To prepare:
 - slot 16: torches
 - slot 15: cobblestone
@@ -45,7 +48,9 @@ Prepare the turtle with the following inventory. This assumes the shaft is start
 branches.lua
 ------------
 Does branch mining.
-Usage: branches.lua <branchLength> <numBranches> [<branchInterval>]
+
+Usage: branches.lua &lt;branchLength> &lt;numBranches> [&lt;branchInterval>]
+
 Digs branches off a 3x2 access shaft presumed to have already been dug.
 Each branch is <branchLength> and branches occur every
 <branchInterval> blocks (defaults to 3 if not provided, or if specified then must be at least 2).
