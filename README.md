@@ -23,7 +23,7 @@ builds a stairway around the perimeter of an existing excavation site.
 
 torch-tunnel.lua
 ----------------
-Usage: torch-tunnel.lua &lt;tunnelLength> &lt;torchInterval>
+**Usage:** torch-tunnel.lua &lt;tunnelLength> &lt;torchInterval>
 
 Same as the stock tunnel, but also places torches every <torchInterval> blocks.
 To prepare:
@@ -49,7 +49,7 @@ branches.lua
 ------------
 Does branch mining.
 
-Usage: branches.lua &lt;branchLength> &lt;numBranches> [&lt;branchInterval>]
+**Usage:** branches.lua &lt;branchLength> &lt;numBranches> [&lt;branchInterval>]
 
 Digs branches off a 3x2 access shaft presumed to have already been dug.
 Each branch is <branchLength> and branches occur every
