@@ -56,7 +56,7 @@ function mineBranch()
     turtle.select(torchSlot)
     turtle.place()
     turnAround()
-    for n=1,branchLength do
+    for n=1,branchLength-1 do
         if not tryForwards() then
             return false
         end
